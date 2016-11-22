@@ -1,0 +1,288 @@
+<style>
+	/* Dropdown Button */
+	.dropbtn {
+		background-color: #f9a525;
+		color: white;
+		padding: 4px;
+		border-radius: 100%;
+		font-size: 10px;
+		border: none;
+		cursor: pointer;
+		height: 22px;
+		width: 22px;
+		outline: none;
+	    padding-top: 6px;
+	}
+
+	/* The container <div> - needed to position the dropdown content */
+	.dropdown {
+		position: fixed;
+		display: inline-block;
+		z-index:600;
+		right: 32px;
+		top:14px;
+	}
+
+	/* Dropdown Content (Hidden by Default) */
+	.dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: #f9f9f9;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		z-index:600;
+		right: 0px;
+		cursor: pointer;
+		
+	}
+
+	/* Links inside the dropdown */
+	.dropdown-content a {
+		color: #3b6982;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+		z-index:600;
+	}
+
+	/* Change color of dropdown links on hover */
+	.dropdown-content a:hover {background-color: #f1f1f1}
+
+	/* Show the dropdown menu on hover */
+	.dropdown:hover .dropdown-content {
+		display: block;
+		z-index:600;
+	}
+
+	/* Change the background color of the dropdown button when the dropdown content is shown */
+	.dropdown:hover .dropbtn {
+		/*background-color: #3e8e41;*/
+	}
+</style>
+
+<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="notifications" style="overflow-y:hidden;z-index:1501;">
+
+        <md-toolbar style="min-height: 42px;height:42px;background:#02b5e2">
+            <div layout="row" layout-align="space-between center">
+
+                <h1 class="md-toolbar-tools" style="color:white">Notifications</h1>
+                <md-button class="md-icon-button"  ng-click="openNotifications()">
+                    <ng-md-icon icon="close" style="fill:white;margin-top:10px" size="24px"></ng-md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-content style="overflow-y:scroll;height:calc(100% - 130px);padding:0" ng-if="notifications.length >= 1">
+            <md-list style="padding:0">
+                <md-list-item class="md-3-line" ng-repeat="notification in notifications" ng-click="viewNotifications(notification)">
+                    <div class="md-list-item-text" layout="column">
+                        <div layout="row" layout-align="start start" > <h3 style="width: 155px;">{{notification.title}}</h3></div>
+                        <p style="margin-top:6px;">{{notification.description}}</p>
+                    </div>
+                    <md-button class="md-icon-button launch" ng-click="removeNotification($event,notification)" style="margin-top: 10px !important" aria-label="delete" ng-if="notification.email == useremail">
+                        <ng-md-icon icon="close" style="fill:#979797" size="18px"></ng-md-icon>
+                    </md-button>
+                </md-list-item>
+            </md-list>
+        </md-content>
+        <md-content style="padding:0;height:calc(100% - 130px)" ng-if="notifications.length < 1" layout="column" layout-align="center center">
+            <p>There are no Notifications</p>
+        </md-content>
+        
+
+</md-sidenav>
+
+<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="searchBar" style="overflow-y:hidden;z-index:1501;">
+
+
+        <md-toolbar style="min-height: 42px;height:42px;background:#02b5e2">
+            <div layout="row" layout-align="space-between center">
+
+                <div class="search-box">
+                    <input class="form-control txt-sm-search-header" placeholder="search dashboard or report..." ng-model="SearchText">
+                </div>
+				<md-button class="md-icon-button"  ng-click="openSearchBar()">
+                    <ng-md-icon icon="close" style="fill:white;margin-top:10px" size="24px"></ng-md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-content style="overflow-y:scroll;height:calc(100% - 130px);padding:0">
+			<div class="dashboard-wrapper">
+				<h3 style="color: #9a9a9a;margin-left:10px">Dashboards</h3>
+			</div>
+			<div class="blut-dashboard-view"
+				 ng-slimscroll
+				 opacity="0.1"
+				 distance="10px"
+				 height="230px"
+				 ng-mouseover="isSarchScorllBar = true"
+				 ng-mouseleave="isSarchScorllBar = false"
+				 enabled="{{ isSarchScorllBar }}">
+
+              
+
+				<ul class="dashboard-wrap" ng-repeat="dashboard in dashboards | filter : SearchText">
+					{{x}} 
+                   
+                    <md-radio-group ng-model="data.defaultDashboard" ng-change="setDefaultDashboard($event,dashboard)">
+                        <md-radio-button value="{{dashboard.dashboardID}}" class="md-primary" style="float: left;">
+                            <md-tooltip md-direction="Bottom" style="z-index: 9999;">
+                                  Set {{dashboard.dashboardName}} as default 
+                            </md-tooltip>
+                        </md-radio-button>
+                    </md-radio-group>
+					<li class="pull-left dashboard-name">{{dashboard.dashboardName}}</li>
+					<li class="pull-right view-more-btn" ng-click="goDashboard(dashboard)">view</li>
+					<li class="pull-right delete-btn" ng-click="deleteDashBoard(dashboard,$event)">delete</li>
+				</ul>
+			</div>
+
+			 <div class="dashboard-wrapper">
+				<h3 style="color: #9a9a9a;margin-left:10px">Reports</h3>
+			</div>
+			<div class="blut-dashboard-view"
+				 ng-slimscroll
+				 opacity="0.1"
+				 distance="10px"
+				 height="230px"
+				 ng-mouseover="isSarchScorllBar = true"
+				 ng-mouseleave="isSarchScorllBar = false"
+				 enabled="{{ isSarchScorllBar }}">
+				<ul class="dashboard-wrap" ng-repeat="report in reports | filter : SearchText">
+					<li class="pull-left dashboard-name">{{report.splitName}}</li>
+					<li class="pull-right view-more-btn" ng-click="goReport(report.splitName)">view</li>
+				</ul>
+			</div>
+        </md-content>
+        
+
+    </md-sidenav>
+
+<div class="digin-style" ng-init="checkIslocal()" ng-intro-options="IntroOptions" ng-intro-method="Introduce">
+    <toast></toast>
+    <!-- preloader start -->
+    
+    <!-- preloader end -->
+    <!-- gridster start -->
+    <div ng-intro-options="IntroOptions" ng-intro-method="CallMe" ng-intro-oncomplete="CompletedEvent"
+         ng-intro-onexit="ExitEvent" ng-intro-onchange="ChangeEvent" ng-intro-onbeforechange="BeforeChangeEvent"
+         ng-intro-onafterchange="AfterChangeEvent"
+         ng-intro-autostart="ShouldAutoStart">
+    </div>
+    <!-- gridster end -->
+    <!-- md theme watch start -->
+    <div>
+        <script type="text/javascript" src="scripts/fbSDK.js"></script>
+        <div id="fb-root">
+        </div>
+        <!-- md theme watch end -->
+        <!-- #SerchBar -->
+        <div class="blut-log-wrapper">
+            <md-tooltip md-direction="left">
+                    v3.2.0.9
+            </md-tooltip>
+            <div class="left-toggle-wrapper" >
+                <img src="{{image}}">
+            </div>
+        </div>
+
+    
+                <div class="main-headbar-slide md-theme-light" layout="row" layout-align="space-between center">
+               
+                    
+					<div class="blut-search-wrapper" ng-click="openSearchBar()" layout="row" flex>
+						<i class="icon-search"></i>
+						Search
+					</div>
+                     
+               
+                 
+					<div class="blut-current-view" flex hide-xs hide-sm>
+						{{currentView}}
+					</div>
+                    <div layout="row" layout-align="end center" class="blut-search-right-wrapper" style="width: 532px;">
+
+                        <div class="blut-header-icon" style="" ng-click="mainclose()" id="home">
+                            <i class="icon-house-outline"></i>
+							<md-tooltip md-direction="bottom">Go To Home</md-tooltip>
+                        </div>
+
+                        <div class="blut-header-icon" ng-click="navigate('TV Mode')" id="fullscreen">
+                            <i class="icon-full-size"></i>
+							<md-tooltip md-direction="bottom">Toggle Fullscreen</md-tooltip>
+                        </div>
+                        <div class="blut-header-icon" ng-click="navigate('Clear Widgets')" id="clearWidgets">
+                            <i class="icon-broom"></i>
+							<md-tooltip md-direction="bottom">Clear Widgets</md-tooltip>
+                        </div>
+                        <div class="blut-header-icon" ng-click="navigate('Save')"  id="save">
+                            <i class="ti-save"></i>
+							<md-tooltip md-direction="bottom">Save Dashboard</md-tooltip>
+                        </div>
+                        <div class="blut-header-icon" ng-click="navigate('share Dashboards')" style="margin-top: -3px;">
+                            <i class="ti-share"></i>
+							<md-tooltip md-direction="bottom">Share Dashboard</md-tooltip>
+                        </div>
+                        <div class="blut-header-icon" ng-click="openNotifications()" style="width:45px;" id="notifications">
+                            <ng-md-icon icon="notifications_none" style="fill:#02b5e2;cursor:pointer" class="widicons" size="26px"></ng-md-icon>
+                            <div style="width:15px;height:15px;border-radius:16px;background:#02b5e2;color:white;margin-top:-34px;margin-left:16px;font-size:10px;font-weight:700;position:absolute"><div style="margin-left:4px;margin-top:1px;" ng-if="notifications.length <=9">{{notifications.length}}</div><div style="margin-left:1px;margin-top:3px;" ng-if="notifications.length > 9">{{notifications.length}}</div></div>
+							<md-tooltip md-direction="bottom">Notifications</md-tooltip>
+                        </div>
+
+
+                        <div class="blut-profile-wrapper-header">
+                            <div layout="row" class="blut-login-user pull-right">
+                                <p ng-model="username">{{firstName }}</p>
+                                <div class="login-img"> 
+                                    <!-- <img src="styles/css/images/signup-user.png"/> -->
+                                    <img src="{{profile_pic}}"/>
+                                </div>
+								<div class="dropdown">
+									<button class="dropbtn"><i class="ti-angle-down"></i></button>
+									<div class="dropdown-content">
+									<a ng-click="navigate('switch tenant')")">Switch Tenant</a>
+									<!--a ng-click="navigate($event,'Invite User')">Invite user</a>
+									<a ng-click="navigate($event,'Profile Settings')">Profile Settings</a-->
+									<a ng-click="navigate('my account')">My Account</a>
+									<a ng-click="Introduce()">Help</a>
+									<a ng-click="navigate('Logout')">
+										<span flex="80">Logout</span>
+										<!--i class="ti-shift-right" flex></i-->
+									</a>
+								  </div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="blut-search-toggele" ng-click="topMenuToggle()">
+                        <span ng-if="!headerMenuToggle" class="ti-angle-down"></span>
+                        <span ng-if="headerMenuToggle" class="ti-angle-up"></span>
+                    </div>
+                </div>
+
+        <!-- end searchBar -->
+
+        <div id="getReport" class="nav-menu nav-bar-border left-menu-bar" ng-include
+             src="'views/ViewSidebar.html'">
+        </div>
+        <!-- sidebar end -->
+        <!-- ui view start -->
+        <ul ui-view layout="column" id="content1" style="height:100% !important;">
+
+        </ul>
+        <!-- ui view end -->
+        <!-- Common data source start -->
+
+        <div class="commonDataSource" ng-include src="'views/common-data-src/ViewCommonDataSrc.html'"
+             ng-controller="commonDataSrcInit">
+        </div>
+
+        
+        <div class="overlay">
+            <div class="overlay">
+                <!--<div class="starting-point">-->
+                <!--<span></span>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+</div>
