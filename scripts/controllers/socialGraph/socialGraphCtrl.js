@@ -16,6 +16,7 @@ routerApp.controller('socialGraphCtrl', function ($scope, config, fbGraphService
     $scope.newPage = true;
     $scope.wordCloudLoading = true;
     $scope.sentimentGraphLoading = true;
+    $scope.sentimentDoneGraphLoading = false;
     $scope.timeChanged = false;
     $scope.postSummaryLoading = false;
     $scope.failedPool = [];
@@ -346,6 +347,7 @@ routerApp.controller('socialGraphCtrl', function ($scope, config, fbGraphService
             } else {
                 $scope.handleFailure({method: 'setPostSummary', error: data});
                 $scope.sentimentGraphLoading = false;
+                $scope.sentimentDoneGraphLoading = true;
                 $scope.postSummaryLoading = false;
             }
         });
@@ -379,7 +381,8 @@ routerApp.controller('socialGraphCtrl', function ($scope, config, fbGraphService
                 $scope.sentimentRequest++;
                 if ($scope.sentimentStatus){
                     $scope.sentimentConfigData.sort(function(a,b){return a[0] - b[0]});                    
-                    $scope.sentimentGraphLoading = false;                        
+                    $scope.sentimentGraphLoading = false;
+                    $scope.sentimentDoneGraphLoading = true;
                     var dataArray = [{
                         type: 'line',
                         name: 'Overall Sentiment',
@@ -505,7 +508,8 @@ routerApp.controller('socialGraphCtrl', function ($scope, config, fbGraphService
         $scope.postSummaryRequest = 0;
         $scope.sentimentRequest = 0;
         $scope.wordCloudLoading = true;
-        $scope.sentimentGraphLoading = true;        
+        $scope.sentimentGraphLoading = true;
+        $scope.sentimentDoneGraphLoading = false;
         $scope.totalViews = 0;
         $scope.failedPool = [];
         $scope.sentimentConfigData = [];
