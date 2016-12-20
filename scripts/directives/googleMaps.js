@@ -120,7 +120,9 @@ routerApp.directive("pageImage", function() {
             console.log(scope.id);
             FB.api(scope.id + '/picture?width=150&height=150', function(response) {
                 if (response) {
-                    scope.cover = response.data.url;
+                    scope.$apply(function(){
+                        scope.cover = response.data.url;
+                    })
                 }
 
             });

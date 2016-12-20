@@ -98,8 +98,8 @@
         <div ng-init="fbPageInit()" data-ng-controller="socialGraphCtrl" class="scroll">
 
             <!-- #show current pages-->
-            <div id="fbPageSearch" ng-class="{'block' : activePageSearch,'hidden' : !activePageSearch}">
-                <md-content class="md-default-theme overflow-none ">
+            <div id="fbPageSearch" ng-class="{'block' : activePageSearch,'hidden' : !activePageSearch}" flex layout="column" layout-align="         center center">
+                <md-content flex= "20" class="md-default-theme overflow-none ">
                     <div class="md-content__body">
                         <div class="home-mini-card">
                             <div class="row m-t-0">
@@ -134,12 +134,11 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </md-content>
 
 
-                <div class="fb-page-search-wrap" ng-if="fbPages.length != 0">
+                <div class="fb-page-search-wrap" ng-if="fbPages.length != 0" flex= "80">
                     <!-- #profile widget -->
                     <div class="col-lg-12">
                         <div class="col-lg-3">
@@ -201,9 +200,7 @@
                                 </div>
                             </div>
                         </div>
-                         
-                        
-                    
+
                     </div>
                     <div class="col-lg-12">
                         <div class="col-lg-3">

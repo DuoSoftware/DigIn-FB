@@ -5,6 +5,6 @@ var routerApp = angular.module('diginFbApp', ['ngAnimate',  'diginServiceHandler
 
 //app common config details
 routerApp.constant('config', {
-    Digin_Engine_API: 'http://prod.digin.io:1929/',
-    Digin_Domain: 'prod.digin.io'
+    Digin_Engine_API: 'http://dev.digin.io:1929/',
+    Digin_Domain: 'dev.digin.io'
 });
