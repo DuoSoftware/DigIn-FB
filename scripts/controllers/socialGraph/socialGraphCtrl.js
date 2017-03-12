@@ -598,6 +598,7 @@ routerApp.controller('socialGraphCtrl', function ($scope, config, fbGraphService
         $mdDialog.show({
             controller: singlePostCtrl,
             templateUrl: 'views/socialGraph/fbPost_template.html',
+            //parent: angular.element(parent.document.body),
             clickOutsideToClose: true,
             locals: {
                 fbPost: post
